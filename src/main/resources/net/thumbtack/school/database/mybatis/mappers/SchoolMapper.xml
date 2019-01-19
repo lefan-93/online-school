@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.thumbtack.school.database.mybatis.mappers.SchoolMapper">
+    <resultMap id="resultSchool" type="net.thumbtack.school.database.model.School">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="year" column="year"/>
+        <collection property="groups" column="id" javaType="java.util.List"
+                    ofType="net.thumbtack.school.database.model.Group">
+            <result property="name" column="group_name"/>
+            <result property="id" column="group_id"/>
+            <result property="room" column="room"/>
+            <collection property="trainees" column="group_id" javaType="java.util.List"
+                        ofType="net.thumbtack.school.database.model.Trainee"
+                        select="net.thumbtack.school.database.mybatis.mappers.TraineeMapper.getByGroup">
+            </collection>
+            <collection property="subjects" column="group_id" javaType="java.util.List"
+                        ofType="net.thumbtack.school.database.model.Subject"
+                        select="net.thumbtack.school.database.mybatis.mappers.SubjectMapper.getByGroup">
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="getAllUsingJoin" resultMap="resultSchool">
+        SELECT
+        school.id as id, name, year, groups.id as group_id, group_name, room
+        FROM school
+        JOIN groups ON school.id = groups.school_id
+    </select>
+
+</mapper>

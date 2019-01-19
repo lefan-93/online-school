@@ -1,0 +1,54 @@
+
+DROP DATABASE IF EXISTS ttschool;
+CREATE DATABASE `ttschool`;
+USE `ttschool`;
+
+CREATE TABLE school (
+id INT (128) NOT NULL AUTO_INCREMENT,
+name VARCHAR(50) NOT NULL,
+year INT (4) NOT NULL,
+UNIQUE KEY school (name,year),
+PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE trainee (
+id INT (128) NOT NULL AUTO_INCREMENT,
+first_name VARCHAR(50) NOT NULL,
+last_name VARCHAR(50) NOT NULL,
+rating INT (128) NOT NULL,
+group_id INT (128) DEFAULT NULL,
+KEY first_name(first_name),
+KEY last_name(last_name),
+KEY rating(rating),
+PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE subject (
+id INT (128) NOT NULL AUTO_INCREMENT,
+subject_name VARCHAR(50) NOT NULL,
+group_id INT(128) DEFAULT NULL,
+UNIQUE KEY subject_name(subject_name),
+PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE groups (
+id INT(128) NOT NULL AUTO_INCREMENT,
+group_name VARCHAR (50) NOT NULL,
+room VARCHAR (50) NOT NULL,
+school_id INT(128) NOT NULL,
+KEY group_name(group_name),
+KEY room(room),
+PRIMARY KEY (id),
+FOREIGN KEY (school_id) REFERENCES school(id) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE subject_group (
+id INT (128) NOT NULL AUTO_INCREMENT,
+subject_id INT(128) NOT NULL,
+group_id INT (128) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE,
+FOREIGN KEY (subject_id) REFERENCES subject (id) ON UPDATE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
